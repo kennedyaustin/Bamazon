@@ -62,6 +62,7 @@ function whatUserWants() {
             if (isNaN(value) === false) {
                 return true
             } else {
+                console.log('Please input an item ID number that you would like to purchase!')
                 return false 
             }
         }
@@ -79,16 +80,35 @@ function whatUserWants() {
             if (userInput.numberofUnits > product[i].stock_quantity) {
 
                 console.log('\n----------- Sorry for the inconvenience, we do not have enough inventory in stock to fulfill your order!-----------\n')
+                storeInventory()
 
             //  If the store has enough in stock of the item the user chooses, they will be shown this information
             } else {
 
-
+                let quantity= product.quantity
                 console.log('\nYou have selected: \n')
                 console.log(`Item: ${product[i].product_name}\nQuantity: ${userInput.numberofUnits}\nPrice per item: $${product[i].price}\nTotal: $` + (product[i].price * userInput.numberofUnits))
 
+                // This builds the query string so that I don't have to do so in the connection.query below
+                let updateInventory= 'update products set stock_quantity = ' + (product.stock_quantity - quantity) + ' where item_id = ' + userInput.item_id
+                // This will update the inventory depending on what the user chose to buy
+                connection.query(updateInventory, function(error, stock) {
+
+                    console.log('\nYour order has been placed! Your total is $' + product[i].price * userInput.numberofUnits + 
+                                '\nThank you for shopping at Bamazon!\n');
+
+                    connection.end()
+
+                })
+                
             }
         }
     })
   })
+}
+
+let confirmPurchase= function() {
+
+    let query= 'select '
+
 }
