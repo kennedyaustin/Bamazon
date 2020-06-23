@@ -77,7 +77,12 @@ function whatUserWants() {
     }
   ])
   .then(userInput => {
-    
+
+    // This will force the user to enter at least 1 item that they would likely want to purchase
+    if (userInput.itemID === '0') {
+        console.log('Please choose an item ID to purchase!')
+        whatUserWants()
+    }
     // This will grab the items that the user chooses and run it through the for loop below
     connection.query('select * from products where item_id= ?', userInput.itemID, function(error, product) {
 
@@ -110,6 +115,7 @@ function whatUserWants() {
   })
 }
 
+// ----------------------------------- Confirm the purchase that the user makes -------------------------------------
 
 function confirmPurchase(updatedStock, purchaseItemID) {
 
