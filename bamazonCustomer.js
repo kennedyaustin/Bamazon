@@ -45,7 +45,7 @@ function whatUserWants() {
         name: 'itemID',
         message: 'Please enter the item ID for the item you would like to purchase!',
         // This will make sure that the user has to type a number into the terminal
-        validate: function(value) {
+        validate: function required(value) {
 
             if (isNaN(value) === false) {
                 return true
@@ -57,12 +57,11 @@ function whatUserWants() {
         type: 'input',
         name: 'numberofUnits',
         message: 'How many of this item would you like to buy?',
-        validate: function(value) {
+        validate: function required(value) {
 
             if (isNaN(value) === false) {
                 return true
             } else {
-                console.log('Please input an item ID number that you would like to purchase!')
                 return false 
             }
         }
@@ -83,23 +82,18 @@ function whatUserWants() {
                 storeInventory()
 
             //  If the store has enough in stock of the item the user chooses, they will be shown this information
+            //  They will also be brought to the confirmation page
             } else {
-
+                
                 let quantity= product.quantity
                 console.log('\nYou have selected: \n')
                 console.log(`Item: ${product[i].product_name}\nQuantity: ${userInput.numberofUnits}\nPrice per item: $${product[i].price}\nTotal: $` + (product[i].price * userInput.numberofUnits))
-
-                // This builds the query string so that I don't have to do so in the connection.query below
-                let updateInventory= 'update products set stock_quantity = ' + (product.stock_quantity - quantity) + ' where item_id = ' + userInput.item_id
-                // This will update the inventory depending on what the user chose to buy
-                connection.query(updateInventory, function(error, stock) {
-
-                    console.log('\nYour order has been placed! Your total is $' + product[i].price * userInput.numberofUnits + 
-                                '\nThank you for shopping at Bamazon!\n');
-
-                    connection.end()
-
-                })
+                
+                // This creates new variables for me to use in the purchase function for changing the values inside the database when the user 
+                // confirms their purchase
+                let updatedStock= (product[i].stock_quantity - userInput.numberofUnits)
+                let purchaseItemID= userInput.itemID
+                confirmPurchase(updatedStock, purchaseItemID)
                 
             }
         }
@@ -107,8 +101,48 @@ function whatUserWants() {
   })
 }
 
-let confirmPurchase= function() {
 
-    let query= 'select '
+function confirmPurchase(updatedStock, purchaseItemID) {
+
+    inquirer
+  .prompt([
+    {
+        // Confirmation prompt for the user before making their purchase
+        type: 'confirm',
+        name: 'confirmPurchase',
+        message: 'Please confirm whether or not you would like to buy the item and with this quantity.',
+        // This will make sure that the user has to type a number into the terminal
+        default: true
+    } 
+  ]).then(function(userConfirms) {
+
+    if (userConfirms.confirmPurchase) {
+
+        // This will update the stock inside the database where the itemID is specified by the user
+        connection.query('update products set ? where ?',
+        [
+        {
+            stock_quantity: updatedStock
+        },
+        {
+            item_id: purchaseItemID
+        }
+        ]), function(error, updating) {}
+
+        console.log('\n-------------------------------\n' +
+                    'Thank you for your purchase, have a nice day!\n' +
+                    '-------------------------------\n')
+        connection.end()
+
+    } else {
+
+        console.log('\n-------------------------------\n' +
+                    'Maybe some other time!\n' +
+                    '-------------------------------')
+        connection.end()
+
+    }
+
+  })
 
 }
