@@ -1,6 +1,5 @@
 create database bamazon;
 use bamazon;
-
 create table products (
 item_id int auto_increment primary key,
 product_name varchar(100) not null,

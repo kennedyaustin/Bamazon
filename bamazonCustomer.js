@@ -1,6 +1,7 @@
 // Requiring packages
 const inquirer= require('inquirer')
 const mysql= require('mysql2')
+var validator = require('validator');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -45,8 +46,13 @@ function whatUserWants() {
         name: 'itemID',
         message: 'Please enter the item ID for the item you would like to purchase!',
         // This will make sure that the user has to type a number into the terminal
-        validate: function required(value) {
-
+        validate: function(value) {
+            if (validator.isEmpty(value)) {
+                console.log('Please choose the item ID that you would like to buy!')
+                return false
+            } else if (value === 0) {
+                return false
+            }
             if (isNaN(value) === false) {
                 return true
             } else {
@@ -57,8 +63,11 @@ function whatUserWants() {
         type: 'input',
         name: 'numberofUnits',
         message: 'How many of this item would you like to buy?',
-        validate: function required(value) {
-
+        validate: function(value) {
+            if (validator.isEmpty(value)) {
+                console.log('Please choose the item ID that you would like to buy!')
+                return false
+            }
             if (isNaN(value) === false) {
                 return true
             } else {
@@ -138,7 +147,7 @@ function confirmPurchase(updatedStock, purchaseItemID) {
 
         console.log('\n-------------------------------\n' +
                     'Maybe some other time!\n' +
-                    '-------------------------------')
+                    '-------------------------------\n')
         connection.end()
 
     }
