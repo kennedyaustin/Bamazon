@@ -39,3 +39,4 @@ A safeguard was added to the terminal for when the user types in '0' or nothing 
 ![](bamazonSS/stopusertyping0.png) <br>
   - Stopping the user from typing nothing <br> 
 ![](bamazonSS/stopusertypingNothing.png) <br>
+
