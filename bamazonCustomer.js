@@ -151,9 +151,7 @@ function confirmPurchase(updatedStock, purchaseItemID) {
 
     } else {
 
-        console.log('\n-------------------------------\n' +
-                    'Maybe some other time!\n' +
-                    '-------------------------------\n')
+        storeInventory()
         connection.end()
 
     }
