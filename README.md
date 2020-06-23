@@ -22,7 +22,7 @@ for each of the nodes above, excluding mysql2, to be able to run the javascript 
 The first thing that the user will see upon opening the terminal and running the file with the command <b>node bamazonCustomer.js</b> is a list of items that our shop is selling at this time. <br>
 ![](bamazonSS/inventory.png) <br>
 
-When the user is ready to continue on to buy one of the products listed, they can type any letter on their keyboard to bring up the next option. After typing on the user has typed something into the terminal, the next question will pop up which asks them which item ID they would like to purchase, with the inventory still being displayed above for ease of access. <br>
+When the user is ready to continue on to buy one of the products listed, they can type any letter on their keyboard to bring up the next option. After typing on the user has typed something into the terminal, the next question will pop up which asks them which item ID they would like to purchase, with the inventory still being displayed above for ease of access. These questions are shown to the user with the help of the inquirer module.<br>
 ![](bamazonSS/choosingItem.png) <br>
 
 After the user has chosen which item they would like to purchase, they will then be prompted to choose how many of that item they would like to take home with them. <br>
@@ -34,9 +34,19 @@ The user will then be shown the item that they want to buy, how many they wanted
 If the user types 'n' into the terminal, they will then be routed back to the inventory screen to choose the item that they meant to buy instead, and if they type 'y' they will be left with a message as they leave the store. <br>
 ![](bamazonSS/exitstore.png) <br>
 
-A safeguard was added to the terminal for when the user types in '0' or nothing at all and hits enter. This will keep them from selecting an item ID and number of items as 0, it will then ask them again to type in which item and how many they would like. <br>
+A safeguard was added to the terminal for when the user types in '0' or nothing at all and hits enter. This will keep them from selecting an item ID and number of items as 0, it will then ask them again to type in which item and how many they would like. This is done with the help of the validator modules 'isempty' function.<br>
   - Stopping the user from typing 0 <br>
 ![](bamazonSS/stopusertyping0.png) <br>
   - Stopping the user from typing nothing <br> 
 ![](bamazonSS/stopusertypingNothing.png) <br>
 
+# Extra Functionality
+
+A store only has so many of one item in stock at a time. So does our Bamazon shop, if the user types in a number that is greater than the stock that the store has to offer, they will be sent back to the inventory screen to try again. <br>
+![](bamazonSS/overflow.png) <br>
+
+Also, when the user buys X number of items, these items will then be subtracted from the inventory that the shop has in its database. This is done with the mysql2 module. This module connects the javascript file to the database that these items are stored in. <br>
+  - Before buying an item from Bamazon <br>
+![](bamazonSS/beforeBuying.png) <br>
+  - After buying an item from Bamazon <br>
+![](bamazonSS/afterBuying.png) <br>
